@@ -9,11 +9,13 @@ import soon from "../assets/img/Log.svg"
 import { Body } from "../componets/body/body";
 export default function Login() {
 
-    const { setLogin } = useContext(UserContext)
+    const { setLogin, setPlans } = useContext(UserContext)
 
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    let login = null;
 
     function fazerLogin(event) {
         event.preventDefault();
@@ -23,8 +25,28 @@ export default function Login() {
                 email: email,
                 password: senha
             })
-            .then((err) => { setLogin(err.data); navigate("/habitos") })
+            .then((err) => { 
+                setLogin(err.data); 
+                login = err.data;
+                (err.data.membership !== null) ? navigate("/home"+err.data.membership.name.split(" ")[1]) : setTimeout(subscriber, 2000)
+            })
             .catch((err) => console.log(err));
+    }
+
+    function subscriber() {
+        navigate("/subscriptions")
+
+        const AuthStr = "Bearer ".concat(login.token);
+        
+        axios
+            .get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships",
+                { headers: { Authorization: AuthStr } })
+            .then(res => {
+                setPlans(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (
