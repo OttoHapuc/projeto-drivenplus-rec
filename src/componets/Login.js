@@ -27,26 +27,13 @@ export default function Login() {
             })
             .then((err) => { 
                 setLogin(err.data); 
-                login = err.data;
-                (err.data.membership !== null) ? navigate("/home"+err.data.membership.name.split(" ")[1]) : setTimeout(subscriber, 2000)
+                (err.data.membership !== null) ? navigate("/home/"+err.data.membership.name.split(" ")[1]) : setTimeout(subscriber, 2000)
             })
-            .catch((err) => console.log(err));
+            .catch((err) => alert(err.response.data.message));
     }
 
     function subscriber() {
         navigate("/subscriptions")
-
-        const AuthStr = "Bearer ".concat(login.token);
-        
-        axios
-            .get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships",
-                { headers: { Authorization: AuthStr } })
-            .then(res => {
-                setPlans(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
     }
 
     return (

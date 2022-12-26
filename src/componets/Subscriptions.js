@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import UserContext from "../contexts/ValoresBase";
 
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -12,6 +12,20 @@ export default function Subscriptions() {
 
     const { login, setLogin, plans, setPlans, setPlanoEscolhido } = useContext(UserContext)
 
+    useEffect(()=>{
+        const AuthStr = "Bearer ".concat(login.token);
+        
+        axios
+            .get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships",
+                { headers: { Authorization: AuthStr } })
+            .then(res => {
+                setPlans(res.data)
+            })
+            .catch((error) => {
+                alert(error.response.data.message)
+            },[])
+    })
+
     if (plans.length === 0) {
         return (
             <Grupo>
@@ -20,6 +34,7 @@ export default function Subscriptions() {
         )
     }
 
+    
     function selecionaPlano(a, b) {
 
         const AuthStr = "Bearer ".concat(login.token);
@@ -31,7 +46,7 @@ export default function Subscriptions() {
                 setPlanoEscolhido(res.data)
             })
             .catch((error) => {
-                console.log(error)
+                alert(error.response.data.message)
             });
 
             navigate(`/subscriptions/${a.id}`)

@@ -7,6 +7,7 @@ import Login from "./componets/Login"
 import SingUp from "./componets/Sing-up"
 import Subscriptions from "./componets/Subscriptions"
 import Plan from "./componets/Plan"
+import Home from "./componets/Home"
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
           <Route path="/sing-up" element={<SingUp />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/subscriptions/:id" element={<Plan />} />
-          <Route path="/home:tipoDeInscricao" element={"/*<Home />*/"} />
+          <Route path="/home/:tipoDeInscricao" element={<Home /> } />
         </Routes>
       </BrowserRouter>
     </UserContex.Provider>

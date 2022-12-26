@@ -11,7 +11,7 @@ import icoNota from "../assets/img/Vector2.svg"
 
 export default function Plan() {
 
-    const { login, planoEscolhido } = useContext(UserContext)
+    const { login, setLogin, planoEscolhido } = useContext(UserContext)
     const navigate = useNavigate();
 
     const [nome, setNome] = useState("")
@@ -46,22 +46,20 @@ export default function Plan() {
                 expirationDate: validade[5] + validade[6] + "/" + validade[2] + validade[3]
             },
                 { headers: { Authorization: AuthStr } })
-            .then(res => {
-                console.log(res.data)
-            })
+            .then()
             .catch((error) => {
-                console.log(error)
+                alert(error.response.data.message)
             });
 
             setFinaliza(false)
-            navigate("/home"+planoEscolhido.name.split(" ")[1])
+            navigate("/home/"+planoEscolhido.name.split(" ")[1])
 
     }
     function cancelarCompra(){
         setFinaliza(false)
     }
     return (
-        <Container onSubmit={assinar}>
+        <Container onSubmit={concluir}>
 
             {finalizaPedido && <FinalizarPedido>
                 <main>
@@ -72,7 +70,7 @@ export default function Plan() {
                     </p>
                     <div>
                         <Nao onClick={cancelarCompra}>Não</Nao>
-                        <Sim onClick={concluir}>Sim</Sim>
+                        <Sim type="submit">Sim</Sim>
                     </div>
                 </main>
             </FinalizarPedido>}
@@ -131,7 +129,7 @@ export default function Plan() {
                 />
             </Segundo>
 
-            <button type="submit">ASSINAR</button>
+            <button onClick={assinar}>ASSINAR</button>
         </Container>
     )
 }
