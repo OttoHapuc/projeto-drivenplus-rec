@@ -11,7 +11,7 @@ import icoNota from "../assets/img/Vector2.svg"
 
 export default function Plan() {
 
-    const { login, setLogin, planoEscolhido } = useContext(UserContext)
+    const { login, setLogin, planoEscolhido, setPlanoEscolhido } = useContext(UserContext)
     const navigate = useNavigate();
 
     const [nome, setNome] = useState("")
@@ -36,7 +36,7 @@ export default function Plan() {
 
     function concluir() {
         const AuthStr = "Bearer ".concat(login.token);
-        
+
         axios
             .post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", {
                 membershipId: planoEscolhido.id,
@@ -51,18 +51,28 @@ export default function Plan() {
                 alert(error.response.data.message)
             });
 
-            setFinaliza(false)
-            navigate("/home/"+planoEscolhido.name.split(" ")[1])
+        setFinaliza(false)
+        navigate("/home/" + planoEscolhido.name.split(" ")[1])
 
     }
-    function cancelarCompra(){
+    function cancelarCompra() {
         setFinaliza(false)
+    }
+    function retornar(){
+        navigate("/subscriptions")
+        setPlanoEscolhido([])
     }
     return (
         <Container onSubmit={concluir}>
 
+            <div className="Return" onClick={retornar}>
+                <ion-icon name="arrow-back-outline"></ion-icon>
+            </div>
+
             {finalizaPedido && <FinalizarPedido>
+                <div onClick={cancelarCompra}><ion-icon name="close-outline"></ion-icon></div>
                 <main>
+                    
                     <p>
                         Tem certeza que deseja assinar o
                         Plano {planoEscolhido.name}
@@ -143,8 +153,18 @@ const Container = styled.form`
     flex-direction: column;
     align-items: center;
     padding-top: 87px;
+    position: relative;
 
     color: white;
+
+    .Return{
+        position: absolute;
+        top:24px;
+        left: 22px;
+        font-weight: 700;
+        font-size:45px;
+        border-radius: 50%;
+    }
 
     img{
         width: 140px;
@@ -257,6 +277,24 @@ const FinalizarPedido = styled.div`
     align-items: center;
     justify-content: center;
 
+    > div{
+        background: #FFFFFF;
+        width: 28px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -15px;
+        right: 22px;
+        border-radius: 5px;
+
+        ion-icon{
+            font-size: 30px;
+            font-weight: 700;
+            color: black;
+        }
+    }
     main {
         width: 248px;
         height: 210px;

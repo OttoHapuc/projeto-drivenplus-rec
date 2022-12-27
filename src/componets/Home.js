@@ -10,10 +10,10 @@ export default function Home() {
     const { login, setLogin, planoEscolhido } = useContext(UserContext)
     const navigate = useNavigate();
 
-    function cancelaPlano(){
+    function cancelaPlano() {
 
         const AuthStr = "Bearer ".concat(login.token);
-        
+
         axios
             .delete("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
                 { headers: { Authorization: AuthStr } })
@@ -35,14 +35,20 @@ export default function Home() {
     return (
         <Grupo>
             <div>
-                <img src={login.membership.image} />
+                {login.membership !== null ? <img src={login.membership.image} /> : <img src={planoEscolhido.image} />}
             </div>
             <h1>Olá, {login.name}</h1>
             <div>
                 <div>
-                    {login.membership.perks.map((perk) => <Link to="/" key={perk.title}>
-                        <button>{perk.title}</button>
-                    </Link>)}
+                    {login.membership !== null ? 
+                        login.membership.perks.map((perk) => <Link to="/" key={perk.title}>
+                            <button>{perk.title}</button>
+                        </Link>)
+                     : 
+                        planoEscolhido.perks.map((perk) => <Link to="/" key={perk.title}>
+                            <button>{perk.title}</button>
+                        </Link>)
+                    }
                 </div>
                 <div>
                     <Link to="/subscriptions" ><button>Mudar plano</button></Link>
